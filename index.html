@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ours, on what terms?</title>
+<meta name="description" content="PLS 210 research design presentation: how Kazakhstani sports fans decide whether foreign-born athletes are truly “ours”.">
+<meta name="theme-color" content="#0A1450">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Both families include Cyrillic -->
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #FFFFFF;
+  --soft: rgba(255, 255, 255, .84);
+  --muted: #B9C4EE;
+  --hair: rgba(255, 255, 255, .45);
+  --ball: #D9F24A;
+  --deep: #070F3D;
+  --sans: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --fs: 18px;
+  --gutter: clamp(20px, 6vw, 110px);
+  --bar-h: 88px;
+}
+@media (min-width: 1024px) { :root { --fs: clamp(20px, .5vw + 13px, 23px); } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden;
+  background: var(--deep); color: var(--ink);
+  font-family: var(--serif); font-size: var(--fs); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--sans); font-weight: 600; margin: 0; letter-spacing: -.035em; line-height: .98; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: #DCE3FF; text-underline-offset: 3px; }
+a:hover { color: var(--ball); }
+:focus-visible { outline: 2px solid var(--ball); outline-offset: 4px; border-radius: 4px; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Editable placeholder */
+mark.ph {
+  background: rgba(217, 242, 74, .12); color: var(--ball);
+  border: 1px dashed var(--ball); border-radius: 3px; padding: 0 .25em;
+}
+
+/* Film grain over everything */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 30; pointer-events: none;
+  opacity: .22; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Corner mark (top right) */
+.corner {
+  position: fixed; top: 0; right: 0; z-index: 20; pointer-events: none;
+  width: clamp(84px, 11vw, 170px); aspect-ratio: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  background: linear-gradient(225deg, #C3D0FF 0%, #7F97F0 45%, #4C66D6 100%);
+}
+.corner svg { position: absolute; top: 14%; right: 12%; width: 26%; height: 26%; }
+
+/* ---------- horizontal track ---------- */
+.track {
+  display: flex; width: 100vw; height: 100vh; height: 100dvh;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.track::-webkit-scrollbar { display: none; }
+
+.slide {
+  --gx: 72%; --gy: 40%;
+  position: relative; flex: 0 0 100%; width: 100%; height: 100%;
+  scroll-snap-align: start; scroll-snap-stop: always;
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain;
+  display: flex; flex-direction: column;
+  padding: clamp(28px, 7vh, 80px) var(--gutter) calc(var(--bar-h) + 24px);
+  background:
+    radial-gradient(55% 60% at var(--gx) var(--gy), rgba(74, 112, 255, .55), transparent 70%),
+    linear-gradient(155deg, transparent 32%, rgba(110, 145, 255, .28) 46%, transparent 62%),
+    linear-gradient(135deg, #0B1658 0%, #0A1A72 42%, #060E3A 100%);
+}
+.inner { margin: auto; width: 100%; max-width: 1180px; }
+.center { text-align: center; }
+
+.eyebrow { font-family: var(--serif); color: var(--soft); font-size: .9em; margin-bottom: 1em; }
+.eyebrow b { font-family: var(--sans); font-weight: 600; color: var(--ball); letter-spacing: .02em; margin-right: .5em; }
+h2 {
+  font-size: clamp(38px, min(4.8vw, 8.4vh), 80px);
+  text-shadow: 0 0 28px rgba(190, 210, 255, .35);
+}
+h2.long { font-size: clamp(30px, min(3.4vw, 6vh), 56px); line-height: 1.05; max-width: 24ch; }
+.glow { text-shadow: 0 0 34px rgba(200, 215, 255, .45); }
+.cite { color: var(--muted); font-size: .8em; font-style: normal; }
+.list li { position: relative; padding-left: 1.1em; color: var(--soft); }
+.list li + li { margin-top: .6em; }
+.list li::before { content: ""; position: absolute; left: 0; top: .62em; width: 5px; height: 5px; border-radius: 50%; background: #fff; }
+
+/* ---------- 1 cover ---------- */
+.cover h1 { font-size: clamp(60px, min(10.5vw, 19vh), 190px); text-shadow: 0 0 40px rgba(200, 215, 255, .5); }
+.cover .meta { font-family: var(--sans); font-weight: 500; letter-spacing: -.01em; margin-bottom: clamp(18px, 4vh, 40px); color: var(--soft); }
+.cover .sub { margin: clamp(20px, 4vh, 40px) auto 0; max-width: 34em; color: var(--soft); }
+.cover .tags { margin-top: 1.4em; font-family: var(--sans); font-size: .85em; color: var(--muted); }
+.cover .tags span + span::before { content: "·"; margin: 0 .7em; }
+
+/* ---------- 2 puzzle: text + line art ---------- */
+.duo { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: center; }
+.duo h2 { margin-bottom: .55em; }
+.duo .list { max-width: 34em; }
+.q { margin-top: 1.2em; font-family: var(--sans); font-weight: 600; font-size: 1.2em; letter-spacing: -.02em; line-height: 1.25; color: #fff; border-left: 2px solid var(--ball); padding-left: .8em; }
+.lineart { width: 100%; max-width: 340px; justify-self: center; display: block; }
+
+/* ---------- 4 contrast cards / 5 not-but boxes ---------- */
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); margin-top: clamp(20px, 4vh, 40px); }
+.card { border: 1px solid var(--hair); border-radius: 14px; padding: clamp(18px, 2.4vw, 30px); background: rgba(255, 255, 255, .04); box-shadow: inset 0 0 40px rgba(120, 150, 255, .1); }
+.card h3 { font-size: 1.2em; letter-spacing: -.02em; line-height: 1.15; }
+.card .eg { margin-top: .5em; color: var(--muted); }
+.card .ask { margin-top: .8em; color: #fff; font-style: italic; }
+.card--photo { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 1.8vw, 24px); align-items: start; }
+.card-photo { margin: 0; }
+.card-photo img {
+  display: block; width: 100%; height: clamp(110px, 22vh, 210px);
+  object-fit: cover; object-position: 50% 30%;
+  border: 1px solid var(--hair); border-radius: 10px; background: rgba(255, 255, 255, .06);
+}
+.card-photo figcaption { margin-top: .5em; font-size: .6em; line-height: 1.35; color: var(--muted); }
+.cards + .q { margin-top: clamp(20px, 4vh, 36px); }
+.note { margin-top: 1em; color: var(--muted); font-size: .85em; }
+.versus { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 3vw, 40px); max-width: 1000px; margin: clamp(24px, 5vh, 48px) auto 0; text-align: left; }
+.versus .tag { font-family: var(--sans); font-weight: 600; font-size: .85em; color: var(--muted); margin-bottom: .6em; }
+.versus .card--but { border-color: rgba(217, 242, 74, .7); }
+.versus .card--but .tag { color: var(--ball); }
+.versus .big { font-family: var(--sans); font-weight: 600; letter-spacing: -.025em; line-height: 1.15; font-size: clamp(24px, min(2.6vw, 4.6vh), 42px); }
+.versus .card--not .big { color: var(--muted); }
+.versus-line { margin: clamp(22px, 4.5vh, 40px) auto 0; max-width: 40em; color: var(--soft); }
+
+/* ---------- 3 research question: circles ---------- */
+.rq h2 { font-size: clamp(32px, min(3.8vw, 6.6vh), 64px); max-width: 22ch; margin: 0 auto; }
+.circles { display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(16px, 3vw, 48px); margin: clamp(22px, 5vh, 48px) 0; }
+.circle {
+  width: clamp(150px, min(15vw, 26vh), 210px); aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid var(--hair); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  box-shadow: inset 0 0 40px rgba(120, 150, 255, .12);
+}
+.circle svg { width: 64px; height: 22px; }
+.circle h3 { font-size: 1.05em; letter-spacing: -.01em; }
+.circle p { color: var(--soft); font-size: .9em; }
+.wsw { display: flex; justify-content: center; flex-wrap: wrap; margin: 0; font-size: .9em; }
+.wsw div { padding: 0 1.4em; border-left: 1px solid var(--hair); }
+.wsw div:first-child { border-left: 0; }
+.wsw dt { display: inline; font-family: var(--sans); font-weight: 600; color: #fff; }
+.wsw dt::after { content: ": "; }
+.wsw dd { display: inline; margin: 0; color: var(--soft); }
+.wsw-note { display: block; margin-top: .2em; font-size: .85em; color: var(--muted); font-style: italic; }
+
+/* ---------- 4 statement ---------- */
+.statement { font-family: var(--sans); font-weight: 600; letter-spacing: -.03em; line-height: 1.12; font-size: clamp(30px, min(3.6vw, 6.4vh), 58px); max-width: 21ch; margin: 0 auto; }
+.statement .not { color: var(--muted); }
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 3vw, 40px); max-width: 980px; margin: clamp(26px, 5vh, 52px) auto 0; }
+.row3 li { color: var(--soft); border-top: 1px solid var(--hair); padding-top: .8em; }
+.center > .cite { display: block; margin-top: clamp(18px, 3vh, 30px); }
+
+/* ---------- 5 shifts ---------- */
+.shifts { max-width: 1040px; margin: clamp(24px, 5vh, 48px) auto 0; }
+.shifts .head, .shifts li { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; gap: 12px; }
+.shifts .head { font-family: var(--sans); font-size: .8em; color: var(--muted); padding-bottom: .6em; }
+.shifts li { border-top: 1px solid var(--hair); padding: clamp(12px, 2.4vh, 22px) 0; }
+.shifts .from { color: var(--muted); }
+.shifts .to { font-family: var(--sans); font-weight: 600; letter-spacing: -.015em; }
+.shifts svg { width: 44px; height: 14px; justify-self: center; }
+
+/* ---------- 6 / 7 split panel ---------- */
+.slide.split { padding: 0; flex-direction: row; }
+.split .panel {
+  flex: 0 0 40%; display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(28px, 7vh, 80px) clamp(24px, 4vw, 64px) calc(var(--bar-h) + 24px) var(--gutter);
+  background: linear-gradient(180deg, rgba(4, 9, 38, .55), rgba(4, 9, 38, .8));
+}
+.split .body {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(28px, 7vh, 80px) var(--gutter) calc(var(--bar-h) + 24px) clamp(24px, 4vw, 64px);
+}
+.split.flip { flex-direction: row-reverse; }
+.split.flip .panel { padding: clamp(28px, 7vh, 80px) var(--gutter) calc(var(--bar-h) + 24px) clamp(24px, 4vw, 64px); }
+.split.flip .body { padding: clamp(28px, 7vh, 80px) clamp(24px, 4vw, 64px) calc(var(--bar-h) + 24px) var(--gutter); }
+.findings li { display: grid; grid-template-columns: 2.2em 1fr; gap: .4em 1em; padding: clamp(10px, 2vh, 18px) 0; border-top: 1px solid rgba(255,255,255,.25); }
+.findings li:first-child { border-top: 0; }
+.findings .n { font-family: var(--sans); font-weight: 500; color: var(--muted); font-size: 1.1em; }
+.findings h3 { font-size: 1.1em; letter-spacing: -.015em; margin-bottom: .25em; line-height: 1.2; }
+.findings p { color: var(--soft); }
+.findings .key .n, .findings .key h3 { color: var(--ball); }
+.findings .key p { color: #fff; }
+
+/* ---------- 8 lens ---------- */
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(22px, 4.5vh, 44px); }
+.cols3 > li { padding: 0 clamp(14px, 2.2vw, 32px); border-left: 1px solid var(--hair); }
+.cols3 > li:first-child { border-left: 0; padding-left: 0; }
+.cols3 h3 { font-size: 1.2em; letter-spacing: -.02em; line-height: 1.15; }
+.cols3 .cite { display: block; margin: .3em 0 .6em; }
+.cols3 p { color: var(--soft); }
+.listen { margin-top: clamp(24px, 5vh, 48px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+.listen h3 { font-size: .9em; letter-spacing: -.005em; font-weight: 500; color: var(--muted); margin-right: 6px; }
+.pill { display: inline-flex; align-items: center; gap: .5em; border: 1px solid var(--hair); border-radius: 999px; padding: .25em .9em; font-family: var(--sans); font-weight: 500; font-size: .9em; }
+.pill::before { content: ""; width: .55em; height: .55em; border-radius: 50%; background: var(--ball); }
+
+/* ---------- 9 expectations / 10, 12 two columns ---------- */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 3.2vh, 32px) clamp(24px, 4vw, 64px); margin-top: clamp(22px, 4.5vh, 44px); }
+.expect li { display: grid; grid-template-columns: 1.8em 1fr; gap: .8em; border-top: 1px solid var(--hair); padding-top: .8em; color: var(--soft); }
+.expect .n { font-family: var(--sans); font-weight: 600; font-size: 1.4em; line-height: 1.05; color: #fff; }
+.expect .wide { grid-column: 1 / -1; }
+.col h3 { font-size: 1.25em; letter-spacing: -.02em; margin-bottom: .8em; padding-bottom: .5em; border-bottom: 1px solid var(--hair); }
+
+/* ---------- 11 AI ---------- */
+.ai { max-width: 820px; margin: clamp(22px, 4.5vh, 44px) auto 0; text-align: left; }
+.ai li { display: grid; grid-template-columns: 1.4em 1fr; gap: .6em; color: var(--soft); }
+.ai li + li { margin-top: .9em; }
+.ai .mk { font-family: var(--sans); font-weight: 600; color: var(--ball); }
+
+/* ---------- 13 references ---------- */
+.refs { margin-top: clamp(14px, 3vh, 30px); font-size: clamp(13px, .3vw + 10px, 16px); line-height: 1.42; columns: 2; column-gap: 48px; color: var(--soft); }
+.refs li { break-inside: avoid; margin-bottom: .9em; padding-left: 1.6em; text-indent: -1.6em; overflow-wrap: anywhere; }
+
+/* ---------- 14 closing ---------- */
+.closing h2 { font-size: clamp(58px, min(9vw, 16vh), 160px); text-shadow: 0 0 40px rgba(200, 215, 255, .5); }
+.closing p { margin-top: clamp(18px, 3.5vh, 34px); color: var(--soft); font-size: 1.1em; }
+
+/* =========================================================
+   BOTTOM INDICATOR: counter, arrows, line, tennis ball
+   ========================================================= */
+.hud {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; height: var(--bar-h);
+  display: flex; align-items: flex-end; gap: clamp(14px, 2.4vw, 32px);
+  padding: 0 var(--gutter) 22px;
+  pointer-events: none;
+}
+.hud > * { pointer-events: auto; }
+.byline { font-family: var(--sans); font-weight: 500; font-size: 14px; color: var(--muted); padding-bottom: 10px; white-space: nowrap; }
+.count { font-family: var(--sans); font-weight: 600; letter-spacing: -.01em; font-size: 17px; font-variant-numeric: tabular-nums; line-height: 1; padding-bottom: 9px; white-space: nowrap; }
+.count .of { color: var(--muted); font-weight: 400; }
+.arrows { display: flex; gap: 8px; }
+.arrow {
+  width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--hair); background: transparent;
+  color: #fff; cursor: pointer; display: grid; place-items: center; padding: 0;
+  transition: border-color .2s, background-color .2s;
+}
+.arrow:hover:not(:disabled) { border-color: #fff; background: rgba(255,255,255,.08); }
+.arrow:disabled { opacity: .3; cursor: default; }
+.arrow svg { width: 14px; height: 14px; }
+.rail { position: relative; flex: 1; height: 56px; margin: 0 10px; }
+.rail-line { position: absolute; left: -10px; right: -10px; bottom: 16px; height: 1px; background: rgba(255,255,255,.7); }
+.tick { position: absolute; bottom: 4px; width: 26px; height: 26px; margin-left: -13px; padding: 0; border: 0; background: transparent; cursor: pointer; border-radius: 4px; }
+.tick::before { content: ""; position: absolute; left: 50%; bottom: 12px; width: 1px; height: 8px; background: rgba(255,255,255,.7); transition: height .2s; }
+.tick:hover::before { height: 13px; background: #fff; }
+.ball-pos { position: absolute; left: 0; bottom: 17px; width: 22px; height: 22px; margin-left: -11px; pointer-events: none; z-index: 2; will-change: transform; }
+.ball-squash { width: 100%; height: 100%; transform-origin: 50% 100%; }
+.ball-spin { width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 6px rgba(217, 242, 74, .45)); }
+.ball-shadow { position: absolute; left: 0; bottom: 13px; width: 20px; height: 6px; margin-left: -10px; border-radius: 50%; background: rgba(0, 0, 0, .55); filter: blur(1px); pointer-events: none; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 860px) {
+  :root { --bar-h: 80px; --gutter: 16px; }
+  .duo, .grid2, .row3, .cols3 { grid-template-columns: 1fr; }
+  .lineart { max-width: 150px; order: -1; }
+  .cols3 > li { border-left: 0; padding: 0; }
+  .cols3 > li + li { margin-top: 1.2em; }
+  .circles { gap: 12px; }
+  .circle { width: 132px; }
+  .circle p, .circle h3 { font-size: 15px; }
+  .wsw { flex-direction: column; align-items: center; gap: .4em; }
+  .wsw div { border: 0; }
+  .shifts .head { display: none; }
+  .shifts li { grid-template-columns: 1fr; gap: 4px; }
+  .shifts svg { transform: rotate(90deg); justify-self: center; }
+  .refs { columns: 1; }
+  .cards, .versus, .card--photo { grid-template-columns: 1fr; }
+  .card-photo img { height: 200px; }
+  .byline { display: none; }
+  .slide.split, .slide.split.flip { flex-direction: column; }
+  .split .panel, .split.flip .panel { flex: none; padding: 32px 16px 24px; }
+  .split .body, .split.flip .body { flex: none; padding: 20px 16px calc(var(--bar-h) + 24px); }
+  .hud { padding: 12px 12px 14px; gap: 10px; background: linear-gradient(to top, rgba(6,14,58,.96) 65%, rgba(6,14,58,0)); }
+  .arrow { width: 32px; height: 32px; }
+  .rail { margin: 0 6px; }
+  .tick { width: 18px; margin-left: -9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow, .tick::before { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Shared tennis-ball drawing -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="ballGrad" cx="36%" cy="30%" r="78%">
+      <stop offset="0" stop-color="#F3FFA3"/><stop offset=".55" stop-color="#D9F24A"/><stop offset="1" stop-color="#A8C12A"/>
+    </radialGradient>
+    <clipPath id="ballClip"><circle r="47"/></clipPath>
+    <symbol id="ball" viewBox="-50 -50 100 100">
+      <circle r="47" fill="url(#ballGrad)"/>
+      <g clip-path="url(#ballClip)" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round">
+        <path d="M-36 -46 C-4 -24 -4 24 -36 46"/><path d="M36 -46 C4 -24 4 24 36 46"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="corner" aria-hidden="true">
+  <svg viewBox="-50 -50 100 100" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round">
+    <circle r="44"/><path d="M-32 -34 C-8 -16 -8 16 -32 34"/><path d="M32 -34 C8 -16 8 16 32 34"/>
+  </svg>
+</div>
+
+<main class="track" id="track">
+
+  <!-- =======================================================
+       ✏️  SLIDE CONTENT — edit the text inside each <section>.
+       data-title = short name read out by the slide indicator.
+       style="--gx/--gy" only moves the background glow.
+       ======================================================= -->
+
+  <!-- ===== SLIDE 1: COVER ===== -->
+  <section class="slide cover" id="slide-1" data-title="Cover" aria-labelledby="t1" style="--gx:70%;--gy:35%">
+    <div class="inner center">
+      <p class="meta">PLS 210 / Fall 2026 / Karagandy</p>
+      <h1 id="t1">Ours, on<br>what terms?</h1>
+      <p class="sub">How do Kazakhstani sports fans decide whether foreign-born athletes who compete for Kazakhstan are truly “ours”?</p>
+      <p class="tags"><span>Interpretivist</span><span>Nazarbayev University</span><span>Fall 2026</span></p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 2: THE PUZZLE ===== -->
+  <section class="slide" id="slide-2" data-title="The puzzle" aria-labelledby="t2" style="--gx:80%;--gy:50%">
+    <div class="inner duo">
+      <div>
+        <p class="eyebrow">The puzzle</p>
+        <h2 id="t2">One flag, many birthplaces</h2>
+        <ul class="list">
+          <li>Kazakhstan has long recruited athletes born elsewhere, many from Russia. Rybakina switched in 2018, won Wimbledon in 2022, and in 2026 won the Australian Open and US Open and became world No. 1. <cite class="cite">(Rickleton &amp; Medelbek, 2023; The National News Desk, 2026)</cite></li>
+          <li>After each win by a foreign-born star, some fans ask why the country doesn’t develop its own talent. <cite class="cite">(Rickleton &amp; Medelbek, 2023)</cite></li>
+          <li>In 2024 the president called for ending the naturalization of foreign athletes. In 2025 Parliament banned budget funding for non-citizen athletes. <cite class="cite">(Askarov, 2025)</cite></li>
+        </ul>
+        <p class="q">So when fans cheer for these athletes, or turn on them, what makes someone “ours”?</p>
+      </div>
+      <svg class="lineart" viewBox="0 0 300 300" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <circle cx="160" cy="150" r="92"/>
+        <path d="M95 86 C140 120 140 180 95 214"/>
+        <path d="M225 86 C180 120 180 180 225 214"/>
+        <path d="M20 250 Q 50 190 62 170" opacity=".6"/>
+        <path d="M8 218 Q 36 170 52 150" opacity=".35"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3: RESEARCH QUESTION ===== -->
+  <section class="slide rq" id="slide-3" data-title="Research question" aria-labelledby="t3" style="--gx:50%;--gy:30%">
+    <div class="inner center">
+      <p class="eyebrow">Research question</p>
+      <h2 id="t3">How do Kazakhstani sports fans decide whether foreign-born athletes are “ours”, and on what terms?</h2>
+      <ul class="circles">
+        <li class="circle">
+          <svg viewBox="0 0 64 22" role="img" aria-label="Ball inside the line"><line x1="44" y1="0" x2="44" y2="22" stroke="#fff"/><circle cx="24" cy="11" r="7" fill="#D9F24A"/></svg>
+          <h3>Claim</h3><p>fully ours</p>
+        </li>
+        <li class="circle">
+          <svg viewBox="0 0 64 22" role="img" aria-label="Ball on the line"><line x1="44" y1="0" x2="44" y2="22" stroke="#fff"/><circle cx="44" cy="11" r="7" fill="#D9F24A"/></svg>
+          <h3>Condition</h3><p>ours, if...</p>
+        </li>
+        <li class="circle">
+          <svg viewBox="0 0 64 22" role="img" aria-label="Ball outside the line"><line x1="20" y1="0" x2="20" y2="22" stroke="#fff"/><circle cx="44" cy="11" r="7" fill="#D9F24A"/></svg>
+          <h3>Refuse</h3><p>not ours</p>
+        </li>
+      </ul>
+      <dl class="wsw">
+        <div><dt>Who</dt><dd>Kazakhstani sports fans</dd></div>
+        <div><dt>Where</dt><dd>Social media comments and interviews</dd></div>
+        <div><dt>When</dt><dd>Big wins and losses, 2022–2026<span class="wsw-note">Recent enough that fans still remember them and can share opinions.</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4: A SECOND CONTRAST ===== -->
+  <section class="slide" id="slide-4" data-title="A second contrast" aria-labelledby="t4" style="--gx:65%;--gy:40%">
+    <div class="inner">
+      <p class="eyebrow">A second contrast</p>
+      <h2 id="t4">Born here, or brought here?</h2>
+      <ul class="cards">
+        <li class="card">
+          <h3>Born in Kazakhstan, not ethnically Kazakh</h3>
+          <p class="eg">e.g. Gennady Golovkin</p>
+          <p class="ask">Do fans talk about ethnicity?</p>
+        </li>
+        <li class="card card--photo">
+          <div>
+            <h3>Born abroad, naturalized</h3>
+            <p class="eg">e.g. Rybakina, Bublik</p>
+            <p class="ask">Do fans talk about birthplace and passports?</p>
+          </div>
+          <figure class="card-photo">
+            <img src="https://tennis.com/images/articles/43597c83-7e6f-4033-99bb-22aa8034fc8c/web.jpg" referrerpolicy="no-referrer" alt="Elena Rybakina holds up her Kazakhstani passport at a press conference in July 2022." loading="lazy">
+            <figcaption>Rybakina shows her Kazakhstani passport after winning Wimbledon, July 2022. Photo: © Sputnik / Vladislav Vodnev</figcaption>
+          </figure>
+        </li>
+      </ul>
+      <p class="q">How, if at all, do fans talk differently about these two kinds of athletes when deciding who is “ours”?</p>
+      <p class="note">A contrast to listen for, not a variable to measure. It links to Kazakhness and Kazakhstanness <cite class="cite">(Laruelle, 2014)</cite>.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5: WHERE I STAND ===== -->
+  <section class="slide" id="slide-5" data-title="Where I stand" aria-labelledby="t5" style="--gx:30%;--gy:45%">
+    <div class="inner center">
+      <p class="eyebrow">Where I stand</p>
+      <h2 id="t5">Interpretivism</h2>
+      <div class="versus">
+        <div class="card card--not"><p class="tag">Not</p><p class="big">How many fans support naturalized athletes?</p></div>
+        <div class="card card--but"><p class="tag">But</p><p class="big">What does “ours” mean to fans?</p></div>
+      </div>
+      <p class="versus-line">Fans create the meaning of “ours”, so their own words are my evidence. <cite class="cite">(Schwartz-Shea &amp; Yanow, 2012)</cite></p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6: WHAT THIS ADDS ===== -->
+  <section class="slide" id="slide-6" data-title="What this adds" aria-labelledby="t6" style="--gx:75%;--gy:60%">
+    <div class="inner center">
+      <p class="eyebrow">What this adds</p>
+      <h2 id="t6">Three shifts</h2>
+      <div class="shifts">
+        <div class="head" aria-hidden="true"><span>Most studies look at</span><span></span><span>My study looks at</span></div>
+        <ol>
+          <li><p class="from">How states and federations trade passports for talent</p><svg viewBox="0 0 44 14" aria-hidden="true"><path d="M0 7h40M34 1l6 6-6 6" fill="none" stroke="#D9F24A" stroke-width="1.5"/></svg><p class="to"><span class="sr-only">shifts to </span>How fans decide who belongs</p></li>
+          <li><p class="from">Olympics worldwide, English-language press</p><svg viewBox="0 0 44 14" aria-hidden="true"><path d="M0 7h40M34 1l6 6-6 6" fill="none" stroke="#D9F24A" stroke-width="1.5"/></svg><p class="to"><span class="sr-only">shifts to </span>Kazakhstan, comments in Kazakh and Russian</p></li>
+          <li><p class="from">Belonging as legal status</p><svg viewBox="0 0 44 14" aria-hidden="true"><path d="M0 7h40M34 1l6 6-6 6" fill="none" stroke="#D9F24A" stroke-width="1.5"/></svg><p class="to"><span class="sr-only">shifts to </span>Belonging as conditions fans set</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 7: WHAT OTHERS FOUND 1/2 ===== -->
+  <section class="slide split" id="slide-7" data-title="What others found, 1 of 2" aria-labelledby="t7" style="--gx:80%;--gy:40%">
+    <div class="panel">
+      <p class="eyebrow">What others found, 1 of 2</p>
+      <h2 id="t7">Quiet in the media, loud among fans</h2>
+    </div>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="n">1</span><div><h3>Switching has grown</h3><p>Most Olympic nationality switches came after the 1990s. Few were pure talent-for-passport deals. <cite class="cite">(Jansen et al., 2018)</cite></p></div></li>
+        <li><span class="n">2</span><div><h3>The press stays calm</h3><p>Most newspaper coverage treats switches casually. Controversy flares only in some cases. <cite class="cite">(Jansen, 2019)</cite></p></div></li>
+        <li class="key"><span class="n">3</span><div><h3>Fans do argue</h3><p>In China, fans’ support for naturalized players rises and falls with the team’s results. <cite class="cite">(Han, Tang &amp; Bairner, 2024)</cite></p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 8: WHAT OTHERS FOUND 2/2 ===== -->
+  <section class="slide split flip" id="slide-8" data-title="What others found, 2 of 2" aria-labelledby="t8" style="--gx:25%;--gy:45%">
+    <div class="panel">
+      <p class="eyebrow">What others found, 2 of 2</p>
+      <h2 id="t8">...and an open question</h2>
+    </div>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="n">4</span><div><h3>Belonging has two sides</h3><p>Feeling at home, and the politics of who is allowed to belong. <cite class="cite">(Antonsich, 2010; Yuval-Davis, 2006)</cite></p></div></li>
+        <li><span class="n">5</span><div><h3>Kazakhstan tells several stories</h3><p>State identity mixes ethnic Kazakhness, civic Kazakhstanness and a global brand. <cite class="cite">(Laruelle, 2014)</cite></p></div></li>
+        <li><span class="n">6</span><div><h3>Research from NU faculty</h3><p>A 2023 survey of 4,000 Kazakhstanis, plus interviews, on civic and ethnic belonging. <cite class="cite">(Sadvokassova, Burkhanov &amp; Sharipova, 2025)</cite></p></div></li>
+        <li class="key"><span class="n">?</span><div><h3>The gap</h3><p>Fan studies exist for China, but not for Kazakhstan. What conditions do Kazakhstani fans attach to “ours”?</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 9: MY LENS ===== -->
+  <section class="slide" id="slide-9" data-title="Analytical framework: sensitising concepts" aria-labelledby="t9" style="--gx:60%;--gy:30%">
+    <div class="inner">
+      <p class="eyebrow">Analytical framework: sensitising concepts</p>
+      <h2 id="t9">Sensitising concepts</h2>
+      <ul class="cols3">
+        <li><h3>Politics of belonging</h3><cite class="cite">(Yuval-Davis, 2006)</cite><p>Who draws the line of belonging, and by which criteria.</p></li>
+        <li><h3>Banal nationalism</h3><cite class="cite">(Billig, 1995)</cite><p>The small word “our”: how the nation is flagged in everyday talk.</p></li>
+        <li><h3>Kazakhness and Kazakhstanness</h3><cite class="cite">(Laruelle, 2014)</cite><p>Ethnic and civic repertoires fans can draw on.</p></li>
+      </ul>
+      <div class="listen">
+        <h3>Conditions I’ll listen for</h3>
+        <span class="pill">Language</span><span class="pill">Birthplace</span><span class="pill">Residence</span><span class="pill">Gratitude</span><span class="pill">Results</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 10: EXPECTATIONS ===== -->
+  <section class="slide" id="slide-10" data-title="Analytical framework: expectations" aria-labelledby="t10" style="--gx:78%;--gy:55%">
+    <div class="inner">
+      <p class="eyebrow">Analytical framework: expectations</p>
+      <h2 id="t10">Expectations</h2>
+      <ol class="grid2 expect">
+        <li><span class="n">1</span><p>“Ours” may depend on results: praised after a win, called “Russian” after a loss.</p></li>
+        <li><span class="n">2</span><p>Speaking Kazakh may matter more than birthplace to some fans.</p></li>
+        <li><span class="n">3</span><p>Athletes who switched after 2022 may be judged more harshly than earlier ones.</p></li>
+        <li><span class="n">4</span><p>Some fans may not care: athletes as professionals, not national symbols.</p></li>
+        <li class="wide"><span class="n">5</span><p>Fans may accept Kazakhstan-born athletes more easily than foreign-born ones, whatever their ethnicity.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 11: POSITIONALITY ===== -->
+  <section class="slide" id="slide-11" data-title="Analytical framework: positionality" aria-labelledby="t11" style="--gx:35%;--gy:35%">
+    <div class="inner">
+      <p class="eyebrow">Analytical framework: positionality</p>
+      <h2 id="t11">How I relate to this topic</h2>
+      <div class="grid2">
+        <div class="col">
+          <h3>What helps me</h3>
+          <ul class="list">
+            <li>I’m a Kazakhstani citizen, and this question matters to me.</li>
+            <li>I’m a tennis fan, so I know the players, the matches and where fans argue.</li>
+            <li>I can read comments in both Kazakh and Russian.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>What I need to watch for</h3>
+          <ul class="list">
+            <li>Because I care, I may hear the answer I expect.</li>
+            <li>As a fan, I may share other fans’ assumptions without noticing.</li>
+            <li>Loud commenters may not speak for most fans.</li>
+            <li>Interviewees may give the “patriotic” answer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 12: WORKING WITH AI ===== -->
+  <section class="slide" id="slide-12" data-title="Working with AI" aria-labelledby="t12" style="--gx:65%;--gy:60%">
+    <div class="inner">
+      <p class="eyebrow">Working with AI</p>
+      <h2 id="t12">AI transparency statement</h2>
+      <div class="grid2">
+        <div class="col">
+          <h3>What I did</h3>
+          <ul class="list">
+            <li>I chose the topic and linked it to my own position as a Kazakhstani citizen and tennis fan.</li>
+            <li>I researched the sources and checked whether they are reliable.</li>
+            <li>I added my own ideas about possible reasons fans accept or reject athletes.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>How AI helped</h3>
+          <ul class="list">
+            <li>Claude suggested research ideas, searched for candidate sources and gave a first reliability check.</li>
+            <li>Claude helped me find possible biases in my research, such as my own stake as a fan and “patriotic” answers.</li>
+            <li>Claude drafted the text and design of this deck, and generated the code for this GitHub page from my prompts.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 13: WHAT WORKING WITH AI HELPED ME UNDERSTAND ===== -->
+  <section class="slide" id="slide-13" data-title="What working with AI helped me understand" aria-labelledby="t13" style="--gx:40%;--gy:55%">
+    <div class="inner">
+      <h2 id="t13" class="long">What working with AI helped me understand, and what I still don’t understand about my research design</h2>
+      <div class="grid2">
+        <div class="col">
+          <h3>What working with AI helped me understand</h3>
+          <ul class="list">
+            <li>A passport makes an athlete eligible. It doesn’t make them “ours”.</li>
+            <li>Belonging may be conditional, not yes or no.</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h3>What I still don’t understand</h3>
+          <ul class="list">
+            <li>How to sample comments without catching only the loudest voices.</li>
+            <li>How to compare comments in Kazakh and Russian fairly.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 14: REFERENCES ===== -->
+  <section class="slide" id="slide-14" data-title="References" aria-labelledby="t14" style="--gx:70%;--gy:25%">
+    <div class="inner">
+      <h2 id="t14">References</h2>
+      <ul class="refs">
+        <li>Antonsich, M. (2010). Searching for belonging: An analytical framework. <i>Geography Compass, 4</i>(6), 644–659. <a href="https://doi.org/10.1111/j.1749-8198.2009.00317.x" target="_blank" rel="noopener">https://doi.org/10.1111/j.1749-8198.2009.00317.x</a></li>
+        <li>Askarov, A. (2025, March 27). <i>V Kazakhstane zapretili soderzhat’ legionerov za schet byudzheta</i> [Kazakhstan bans funding foreign athletes from the budget]. Kapital.kz. <a href="https://kapital.kz/gosudarstvo/135564/v-kazahstane-zapretili-soderzhat-legionerov-za-schet-byudzheta.html" target="_blank" rel="noopener">https://kapital.kz/gosudarstvo/135564/v-kazahstane-zapretili-soderzhat-legionerov-za-schet-byudzheta.html</a></li>
+        <li>Billig, M. (1995). <i>Banal nationalism</i>. Sage.</li>
+        <li>Han, P., Tang, S., &amp; Bairner, A. (2024). Citizenship without identity? Instrumentalism, nationalism and naturalization in Chinese men’s football. <i>International Review for the Sociology of Sport, 59</i>(2), 258–277. <a href="https://doi.org/10.1177/10126902231199580" target="_blank" rel="noopener">https://doi.org/10.1177/10126902231199580</a></li>
+        <li>Jansen, J. (2019). Nationality swapping in the Olympic Games 1978–2017: A supervised machine learning approach to analysing discourses of citizenship and nationhood. <i>International Review for the Sociology of Sport, 54</i>(8), 971–988. <a href="https://doi.org/10.1177/1012690218773969" target="_blank" rel="noopener">https://doi.org/10.1177/1012690218773969</a></li>
+        <li>Jansen, J., Oonk, G., &amp; Engbersen, G. (2018). Nationality swapping in the Olympic field: Towards the marketization of citizenship? <i>Citizenship Studies, 22</i>(5), 523–539. <a href="https://doi.org/10.1080/13621025.2018.1477921" target="_blank" rel="noopener">https://doi.org/10.1080/13621025.2018.1477921</a></li>
+        <li>Laruelle, M. (2014). The three discursive paradigms of state identity in Kazakhstan: Kazakhness, Kazakhstanness and transnationalism. In M. Y. Omelicheva (Ed.), <i>Nationalism and identity construction in Central Asia: Dimensions, dynamics, and directions</i> (pp. 1–20). Lexington Books.</li>
+        <li>Rickleton, C., &amp; Medelbek, R. (2023, August 23). <i>After figure skating star’s nationality switch, will Russia’s loss be Kazakhstan’s gain?</i> RFE/RL. <a href="https://www.rferl.org/a/russia-loss-figure-skater-nationality-kazakhstan-gain/32561298.html" target="_blank" rel="noopener">https://www.rferl.org/a/russia-loss-figure-skater-nationality-kazakhstan-gain/32561298.html</a></li>
+        <li>Sadvokassova, A., Burkhanov, A., &amp; Sharipova, D. (2025). In search for Kazakhstani identity: Societal perceptions of Kazakhstan’s nation-building. <i>Nationalism and Ethnic Politics, 31</i>(1), 114–137. <a href="https://doi.org/10.1080/13537113.2024.2422198" target="_blank" rel="noopener">https://doi.org/10.1080/13537113.2024.2422198</a></li>
+        <li>Schwartz-Shea, P., &amp; Yanow, D. (2012). Ways of knowing. In <i>Interpretive research design: Concepts and processes</i> (pp. 24–44). Routledge.</li>
+        <li>The National News Desk. (2026, September). <i>Rybakina tops Sabalenka to win US Open, claim No. 1 ranking</i>. <a href="https://abc3340.com/news/nation-world/rybakina-tops-sabalenka-to-win-us-open-claim-no-1-ranking" target="_blank" rel="noopener">https://abc3340.com/news/nation-world/rybakina-tops-sabalenka-to-win-us-open-claim-no-1-ranking</a></li>
+        <li>Yuval-Davis, N. (2006). Belonging and the politics of belonging. <i>Patterns of Prejudice, 40</i>(3), 197–214. <a href="https://doi.org/10.1080/00313220600769331" target="_blank" rel="noopener">https://doi.org/10.1080/00313220600769331</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 15: THANK YOU ===== -->
+  <section class="slide closing" id="slide-15" data-title="Thank you" aria-labelledby="t15" style="--gx:50%;--gy:40%">
+    <div class="inner center">
+      <h2 id="t15">Thank you.</h2>
+      <p>PLS 210 / Fall 2026 / Karagandy</p>
+    </div>
+  </section>
+
+  <!-- ✏️  SLIDE CONTENT ENDS HERE -->
+</main>
+
+<!-- Slide indicator -->
+<nav class="hud" aria-label="Slides">
+  <div class="byline">PLS 210 / Karagandy</div>
+  <div class="count" aria-hidden="true"><span id="cur">01</span> <span class="of">/ <span id="tot">15</span></span></div>
+  <div class="arrows">
+    <button class="arrow" id="prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <button class="arrow" id="next" type="button" aria-label="Next slide"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="m5 2 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+  </div>
+  <div class="rail" id="rail">
+    <div class="rail-line"></div>
+    <div class="ball-shadow" id="ballShadow" aria-hidden="true"></div>
+    <div class="ball-pos" id="ballPos" aria-hidden="true">
+      <div class="ball-squash" id="ballSquash">
+        <svg class="ball-spin" id="ballSpin" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#ball" width="100" height="100"/></svg>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="sr-only" id="live" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+  const track  = document.getElementById('track');
+  const slides = Array.from(track.querySelectorAll('.slide'));
+  const N      = slides.length;
+  const rail   = document.getElementById('rail');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const ballPos = document.getElementById('ballPos');
+  const ballSquash = document.getElementById('ballSquash');
+  const ballSpin = document.getElementById('ballSpin');
+  const ballShadow = document.getElementById('ballShadow');
+  const live   = document.getElementById('live');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const pad2 = n => String(n).padStart(2, '0');
+  document.getElementById('tot').textContent = pad2(N);
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  /* ---------- ticks (one per slide, click to jump) ---------- */
+  const pct = i => (N === 1 ? 50 : (i / (N - 1)) * 100);
+  const ticks = slides.map((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tick';
+    b.style.left = pct(i) + '%';
+    b.setAttribute('aria-label', `Slide ${i + 1}: ${s.dataset.title || ''}`);
+    b.addEventListener('click', () => go(i));
+    rail.appendChild(b);
+    return b;
+  });
+
+  /* ---------- tennis ball: bouncing arc ---------- */
+  const BALL = 22, MAX_H = 60;
+  let ballX = 0, ballRot = 0, rafId = 0;
+  const tickX = i => rail.clientWidth * pct(i) / 100;
+  function drawBall(x, y) {
+    ballPos.style.transform = `translate(${x}px, ${-y}px)`;
+    ballSpin.style.transform = `rotate(${ballRot}deg)`;
+    const k = Math.min(1, y / MAX_H);
+    ballShadow.style.transform = `translateX(${x}px) scale(${1 - 0.6 * k})`;
+    ballShadow.style.opacity = String(0.6 - 0.4 * k);
+  }
+  function moveBall(to, animate) {
+    cancelAnimationFrame(rafId);
+    const x1 = tickX(to), x0 = ballX, dist = Math.abs(x1 - x0);
+    if (!animate || reduce.matches || dist < 1) { ballX = x1; drawBall(x1, 0); return; }
+    const dur = Math.min(1000, 420 + dist * 0.8);
+    const h = Math.min(MAX_H, 22 + dist * 0.16);
+    const rot0 = ballRot, t0 = performance.now();
+    const step = now => {
+      const t = Math.min(1, (now - t0) / dur);
+      const x = x0 + (x1 - x0) * t;
+      ballX = x;
+      ballRot = rot0 + ((x - x0) / (Math.PI * BALL)) * 360;
+      drawBall(x, 4 * h * t * (1 - t));             // parabola
+      if (t < 1) rafId = requestAnimationFrame(step);
+      else if (ballSquash.animate) {                // squash on landing
+        ballSquash.animate([
+          { transform: 'scale(1,1)' },
+          { transform: 'scale(1.3,.7)', offset: .3 },
+          { transform: 'scale(.95,1.06)', offset: .65 },
+          { transform: 'scale(1,1)' }
+        ], { duration: 260, easing: 'ease-out' });
+      }
+    };
+    rafId = requestAnimationFrame(step);
+  }
+
+  /* ---------- state ---------- */
+  let current = 0, programmatic = false, progTimer = 0, settleTimer = 0;
+
+  function render(prev, { push = true, animate = true } = {}) {
+    slides.forEach((s, k) => { s.inert = k !== current; });
+    ticks.forEach((t, k) => k === current ? t.setAttribute('aria-current', 'step') : t.removeAttribute('aria-current'));
+    document.getElementById('cur').textContent = pad2(current + 1);
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === N - 1;
+    if (prev !== current && prev !== -1) live.textContent = `Slide ${current + 1} of ${N}: ${slides[current].dataset.title || ''}`;
+    moveBall(current, animate && prev !== current);
+    const hash = '#slide-' + (current + 1);
+    if (location.hash !== hash) history[push ? 'pushState' : 'replaceState'](null, '', hash);
+  }
+  function scrollToCurrent(smooth) {
+    programmatic = true;
+    clearTimeout(progTimer);
+    progTimer = setTimeout(() => { programmatic = false; }, 1500);
+    track.scrollTo({ left: current * track.clientWidth, behavior: smooth && !reduce.matches ? 'smooth' : 'auto' });
+  }
+  function go(i, { push = true, smooth = true } = {}) {
+    i = Math.max(0, Math.min(N - 1, i));
+    const prev = current;
+    current = i;
+    scrollToCurrent(smooth);
+    if (i !== prev) render(prev, { push });
+  }
+
+  /* Swipe / trackpad: read the slide once scrolling settles */
+  function onSettle() {
+    clearTimeout(settleTimer);
+    if (programmatic) {
+      if (Math.abs(track.scrollLeft - current * track.clientWidth) < 2) { programmatic = false; clearTimeout(progTimer); }
+      return;
+    }
+    const i = Math.round(track.scrollLeft / track.clientWidth);
+    if (i !== current) { const prev = current; current = i; render(prev); }
+  }
+  track.addEventListener('scroll', () => { clearTimeout(settleTimer); settleTimer = setTimeout(onSettle, 140); }, { passive: true });
+  if ('onscrollend' in window) track.addEventListener('scrollend', onSettle);
+
+  prevBtn.addEventListener('click', () => go(current - 1));
+  nextBtn.addEventListener('click', () => go(current + 1));
+
+  /* ---------- keyboard ---------- */
+  window.addEventListener('keydown', e => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    const onButton = e.target.closest && e.target.closest('button');
+    switch (e.key) {
+      case 'ArrowRight': case 'PageDown': e.preventDefault(); go(current + 1); break;
+      case 'ArrowLeft':  case 'PageUp':   e.preventDefault(); go(current - 1); break;
+      case ' ': case 'Spacebar':
+        if (onButton) return;                       // Space presses a focused button
+        e.preventDefault(); go(current + (e.shiftKey ? -1 : 1)); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End':  e.preventDefault(); go(N - 1); break;
+    }
+  });
+
+  /* ---------- mouse wheel: one gesture = one slide ---------- */
+  let wheelReady = true, wheelAcc = 0, wheelTimer = 0, lastWheelNav = 0;
+  const COOLDOWN = 550;                             // min gap between wheel-driven changes
+  const armWheel = ms => {
+    clearTimeout(wheelTimer);
+    const wait = Math.max(ms, lastWheelNav + COOLDOWN - performance.now());
+    wheelTimer = setTimeout(() => { wheelReady = true; wheelAcc = 0; }, wait);
+  };
+  function canScrollInside(el, dy) {
+    if (el.scrollHeight <= el.clientHeight + 1) return false;
+    return dy > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0;
+  }
+  window.addEventListener('wheel', e => {
+    if (e.ctrlKey) return;                          // pinch-zoom
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? innerHeight : 1;
+    const dx = e.deltaX * unit, dy = e.deltaY * unit;
+    const vertical = Math.abs(dy) >= Math.abs(dx);
+    // A tall slide (e.g. references) scrolls itself first
+    if (vertical && canScrollInside(slides[current], dy)) { wheelReady = false; armWheel(260); return; }
+    e.preventDefault();
+    armWheel(220);                                  // gesture ends after 220ms of quiet
+    if (!wheelReady) return;
+    wheelAcc += vertical ? dy : dx;
+    if (Math.abs(wheelAcc) < 24) return;
+    const dir = wheelAcc > 0 ? 1 : -1;
+    wheelReady = false; wheelAcc = 0; lastWheelNav = performance.now();
+    go(current + dir);
+  }, { passive: false });
+
+  /* ---------- URL hash + back button ---------- */
+  function indexFromHash() {
+    const m = /^#slide-(\d+)$/.exec(location.hash);
+    const n = m ? parseInt(m[1], 10) : 0;
+    return n >= 1 && n <= N ? n - 1 : null;
+  }
+  function onHash() {
+    const i = indexFromHash();
+    if (i !== null && i !== current) go(i, { push: false });
+  }
+  window.addEventListener('popstate', onHash);
+  window.addEventListener('hashchange', onHash);
+
+  /* ---------- resize keeps the current slide in place ---------- */
+  let resizeRaf = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(() => {
+      scrollToCurrent(false);
+      cancelAnimationFrame(rafId);
+      ballX = tickX(current); drawBall(ballX, 0);
+    });
+  });
+
+  /* ---------- start ---------- */
+  current = indexFromHash() ?? 0;
+  scrollToCurrent(false);
+  render(-1, { push: false, animate: false });
+  window.addEventListener('load', () => { scrollToCurrent(false); ballX = tickX(current); drawBall(ballX, 0); });
+})();
+</script>
+</body>
+</html>
